@@ -1,1 +1,1 @@
-# react-streaming
+# react-tictactoe-app
