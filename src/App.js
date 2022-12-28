@@ -7,16 +7,26 @@ const App = () => {
   const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
   // xIsNext: 플레이어(boolean타입으로 구분)
   const [xIsNext, setXIsNext] = useState(true);
+  // stepNumber: 현재 몇번째 스탭
+  const [stepNumber, setStepNumber] = useState(0);
   // current: 현재의 게임판 상황
-  const current = history[history.length - 1];
+  const current = history[stepNumber];
   // winner: current를 이용하여 승자가 있는지 없는지 확인
   const winner = calculateWinner(current.squares);
+
+  const jumpTo = (move) => {
+    setStepNumber(move);
+    setXIsNext(move % 2 === 0);
+  };
+
   // moves: history를 이용하여 현재 몇번째 움직이는지 메시지를 변경
   const moves = history.map((step, move) => {
     const desc = move ? "Go to move #" + move : "Go to game start";
     return (
       <li key={move}>
-        <button>{desc}</button>
+        <button className="move-button" onClick={() => jumpTo(move)}>
+          {desc}
+        </button>
       </li>
     );
   });
@@ -30,14 +40,18 @@ const App = () => {
   }
 
   const handleClick = (i) => {
-    const newSquares = current.squares.slice();
+    const newHistory = history.slice(0, stepNumber + 1);
+    const newCurrent = newHistory[newHistory.length - 1];
+    const newSquares = newCurrent.squares.slice();
 
     if (calculateWinner(newSquares) || newSquares[i]) {
       return; // 아래로 코드 진행 X
     }
     newSquares[i] = xIsNext ? "X" : "O";
-    setHistory([...history, { squares: newSquares }]);
-    setXIsNext((previousValue) => !previousValue);
+    setHistory([...newHistory, { squares: newSquares }]);
+    setXIsNext((current) => !current);
+
+    setStepNumber(newHistory.length);
   };
 
   function calculateWinner(squares) {
@@ -75,7 +89,7 @@ const App = () => {
         <div className="status">{status}</div>
         <div></div>
         {/* TODO */}
-        <ol>{moves}</ol>
+        <ol style={{ listStyle: "none" }}>{moves}</ol>
       </div>
     </div>
   );
