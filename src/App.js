@@ -11,8 +11,17 @@ const App = () => {
   const current = history[history.length - 1];
   // winner: current를 이용하여 승자가 있는지 없는지 확인
   const winner = calculateWinner(current.squares);
+  // moves: history를 이용하여 현재 몇번째 움직이는지 메시지를 변경
+  const moves = history.map((step, move) => {
+    const desc = move ? "Go to move #" + move : "Go to game start";
+    return (
+      <li key={move}>
+        <button>{desc}</button>
+      </li>
+    );
+  });
 
-  // status: winner를 이용하여 프린트되는 메시지를 변경
+  // status: winner를 이용하여 플레이어가 누군지 or 승자가 누군지 메시지를 변경
   let status;
   if (winner) {
     status = "Winner: " + winner;
@@ -66,7 +75,7 @@ const App = () => {
         <div className="status">{status}</div>
         <div></div>
         {/* TODO */}
-        <ol></ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
