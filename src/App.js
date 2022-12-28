@@ -1,4 +1,4 @@
-// 클래스형 -> 함수형으로 바꿀겁니다.
+// // 클래스형 -> 함수형으로 바꿀겁니다.
 import React from "react";
 import "./App.css";
 import Board from "./components/Board";
